@@ -13,7 +13,7 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class AlbumDAO implements AlbumDAO_interface {
+public class AlbumDAO implements AlbumDAO_Interface {
 
 	private static final String CREATE_SQL = "insert into album(alb_no,mem_no,name,cover,create_date) values(ltrim(To_char(alb_sq.nextval,'0009')),?,?,?,CURRENT_TIMESTAMP)";
 	private static final String DELETE_SQL = "delete from album where alb_no = ?";

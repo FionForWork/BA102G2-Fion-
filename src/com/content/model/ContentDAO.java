@@ -14,10 +14,8 @@ import javax.sql.DataSource;
 
 public class ContentDAO implements ContentDAO_Interface {
 
-	private static final String UPLOAD_IMG_SQL = "insert into content(cont_no,alb_no,img,upload_date,cont_desc) "
-			+ "values(ltrim(To_char(cont_sq.nextval,'0009')),?,?,CURRENT_TIMESTAMP,?)";
-	private static final String UPLOAD_VDO_SQL = "insert into content(cont_no,alb_no,vdo,upload_date,cont_desc) "
-			+ "values(ltrim(To_char(cont_sq.nextval,'0009')),?,?,CURRENT_TIMESTAMP,?)";
+	private static final String INSERT_SQL = "insert into content(cont_no,alb_no,img,vdo,upload_date,cont_desc) "
+			+ "values(ltrim(To_char(cont_sq.nextval,'0009')),?,?,?,CURRENT_TIMESTAMP,?)";
 	private static final String DELETE_SQL = "delete from content where cont_no = ?";
 	private static final String UPDATE_SQL = "update content set alb_no=?,img=?,vdo=?,upload_date=?,cont_desc=? where cont_no = ?";
 	private static final String FIND_BY_PK = "select * from content where cont_no = ?";
@@ -38,7 +36,7 @@ public class ContentDAO implements ContentDAO_Interface {
 	
 	
 	@Override
-	public String uploadImg(ContentVO content) {
+	public String insertContent(ContentVO content) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -47,10 +45,11 @@ public class ContentDAO implements ContentDAO_Interface {
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(UPLOAD_IMG_SQL, cols);
+			pstmt = conn.prepareStatement(INSERT_SQL, cols);
 			pstmt.setString(1, content.getAlb_no());
 			pstmt.setBytes(2, content.getImg());
-			pstmt.setString(3, content.getCont_desc());
+			pstmt.setBytes(3, content.getVdo());
+			pstmt.setString(4, content.getCont_desc());
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {
@@ -79,48 +78,7 @@ public class ContentDAO implements ContentDAO_Interface {
 		return cont_no;
 	}
 
-	@Override
-	public String uploadVdo(ContentVO content) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String[] cols = { "cont_no" };
-		String cont_no = "";
-		try {
-			conn = ds.getConnection();
-			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(UPLOAD_VDO_SQL, cols);
-			pstmt.setString(1, content.getAlb_no());
-			pstmt.setBytes(2, content.getVdo());
-			pstmt.setString(3, content.getCont_desc());
-			pstmt.executeUpdate();
-			rs = pstmt.getGeneratedKeys();
-			while (rs.next()) {
-				cont_no = rs.getString(1);
-			}
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return cont_no;
-	}
-
+	
 	@Override
 	public void deleteContent(String cont_no) {
 

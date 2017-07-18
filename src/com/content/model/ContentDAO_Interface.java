@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface ContentDAO_Interface {
 
-	public String uploadImg(ContentVO content);
-	public String uploadVdo(ContentVO content);
+	public String insertContent(ContentVO content);
 	public void deleteContent(String cont_no);
 	public void updateContent(ContentVO content);
 	public ContentVO findContentByPK(String cont_no);
