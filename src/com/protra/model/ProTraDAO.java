@@ -1,4 +1,4 @@
-package com.comtra.model;
+package com.protra.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,40 +9,40 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComTraDAO implements ComTraDAO_Interface {
+import com.comtra.model.ComTraVO;
 
-	
-	private static final String INSERT_SQL = "insert into comtra(comtra_no,com_no,mem_no) values(ltrim(To_char(comtra_sq.nextval,'0009')),?,?)";
-	private static final String DELETE_SQL = "delete from comtra where comtra_no = ?";
-	private static final String UPDATE_SQL = "update comtra set com_no=?,mem_no=? where comtra_no = ?";
-	private static final String FIND_BY_PK = "select * from comtra where comtra_no = ?";
-	private static final String FIND_BY_MEM_NO = "select * from comtra where mem_no=?";
-	private static final String FIND_ALL = "select * from comtra";
+public class ProTraDAO implements ProTraDAO_Interface{
+
+	private static final String INSERT_SQL = "insert into protra(protra_no,pro_no,mem_no) values(ltrim(To_char(protra_sq.nextval,'0009')),?,?)";
+	private static final String DELETE_SQL = "delete from protra where protra_no = ?";
+	private static final String UPDATE_SQL = "update protra set pro_no=?,mem_no=? where protra_no = ?";
+	private static final String FIND_BY_PK = "select * from protra where protra_no = ?";
+	private static final String FIND_BY_MEM_NO = "select * from protra where mem_no=?";
+	private static final String FIND_ALL = "select * from protra";
 
 	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	private static final String USERNAME = "model";
 	private static final String PWD = "model";
 	
-	
 	@Override
-	public String insertComTra(ComTraVO comTra) {
+	public String insertProTra(ProTraVO proTra) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String[] cols = { "comtra_no" };
-		String comtra_no ="";
+		String[] cols = { "protra_no" };
+		String protra_no ="";
 		try {
 			Class.forName(DRIVER);
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(INSERT_SQL, cols);
-			pstmt.setString(1, comTra.getCom_no());
-			pstmt.setString(2, comTra.getMem_no());
+			pstmt.setString(1, proTra.getPro_no());
+			pstmt.setString(2, proTra.getMem_no());
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {
-				comtra_no = rs.getString(1);
+				protra_no = rs.getString(1);
 			}
 			conn.commit();
 		} catch (Exception e) {
@@ -64,11 +64,11 @@ public class ComTraDAO implements ComTraDAO_Interface {
 				e.printStackTrace();
 			}
 		}
-		return comtra_no;
+		return protra_no;
 	}
 
 	@Override
-	public void deleteComTra(String comTra_no) {
+	public void deleteProTra(String protra_no) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -77,7 +77,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(DELETE_SQL);
-			pstmt.setString(1, comTra_no);
+			pstmt.setString(1, protra_no);
 			pstmt.executeUpdate();
 			conn.commit();
 
@@ -104,7 +104,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 	}
 
 	@Override
-	public void updateComTra(ComTraVO comTra) {
+	public void updateProTra(ProTraVO proTra) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -113,9 +113,9 @@ public class ComTraDAO implements ComTraDAO_Interface {
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(UPDATE_SQL);
-			pstmt.setString(1, comTra.getCom_no());
-			pstmt.setString(2, comTra.getMem_no());
-			pstmt.setString(3, comTra.getComtra_no());
+			pstmt.setString(1, proTra.getPro_no());
+			pstmt.setString(2, proTra.getMem_no());
+			pstmt.setString(3, proTra.getProtra_no());
 			pstmt.executeUpdate();
 			conn.commit();
 		} catch (Exception e) {
@@ -137,22 +137,23 @@ public class ComTraDAO implements ComTraDAO_Interface {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 
 	@Override
-	public ComTraVO findComTraByPK(String comTra_no) {
+	public ProTraVO findProTraByPK(String protra_no) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		ComTraVO comTra = null;
+		ProTraVO proTra = null;
 		try {
 			Class.forName(DRIVER);
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			pstmt = conn.prepareStatement(FIND_BY_PK);
-			pstmt.setString(1, comTra_no);
+			pstmt.setString(1, protra_no);
 			rs = pstmt.executeQuery();
 			rs.next();
-			comTra = new ComTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
+			proTra = new ProTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -178,16 +179,16 @@ public class ComTraDAO implements ComTraDAO_Interface {
 				}
 			}
 		}
-		return comTra;
+		return proTra;
 	}
 
 	@Override
-	public List<ComTraVO> findComTraByMemNo(String mem_no) {
+	public List<ProTraVO> findProTraByMemNo(String mem_no) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		ComTraVO comTra = null;
-		List<ComTraVO> comTraList = new ArrayList<>();
+		ProTraVO comTra = null;
+		List<ProTraVO> comTraList = new ArrayList<>();
 		try {
 			Class.forName(DRIVER);
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
@@ -195,7 +196,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 			pstmt.setString(1, mem_no);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				comTra = new ComTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
+				comTra = new ProTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
 				comTraList.add(comTra);
 			}
 		} catch (Exception e) {
@@ -227,20 +228,20 @@ public class ComTraDAO implements ComTraDAO_Interface {
 	}
 
 	@Override
-	public List<ComTraVO> findAll() {
+	public List<ProTraVO> findAll() {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		ComTraVO comTra = null;
-		List<ComTraVO> comTraList = new ArrayList<>();
+		ProTraVO proTra = null;
+		List<ProTraVO> proTraList = new ArrayList<>();
 		try {
 			Class.forName(DRIVER);
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(FIND_ALL);
 			while (rs.next()) {
-				comTra = new ComTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
-				comTraList.add(comTra);
+				proTra = new ProTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
+				proTraList.add(proTra);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -267,8 +268,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 				}
 			}
 		}
-		return comTraList;
+		return proTraList;
 	}
 
-	
 }

@@ -1,6 +1,8 @@
 package com.comtra.model;
 
-public class ComTraVO {
+import java.io.Serializable;
+
+public class ComTraVO implements Serializable {
 
 	private String comtra_no;
 	private String com_no;

@@ -8,6 +8,6 @@ public interface ComTraDAO_Interface {
 	public void deleteComTra(String comTra_no);
 	public void updateComTra(ComTraVO comTra);
 	public ComTraVO findComTraByPK(String comTra_no);
-	public ComTraVO findComTraByMemNo(String mem_no);
+	public List<ComTraVO> findComTraByMemNo(String mem_no);
 	public List<ComTraVO> findAll();
 }
