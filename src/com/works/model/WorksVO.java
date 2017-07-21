@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 public class WorksVO implements Serializable{
 
 	private String works_no;
-	private String wtype_no;
 	private String com_no;
 	private String name;
 	private String works_desc;
@@ -18,11 +17,10 @@ public class WorksVO implements Serializable{
 		super();
 	}
 
-	public WorksVO(String works_no, String wtype_no, String com_no, String name, String works_desc, byte[] img, byte[] vdo,
+	public WorksVO(String works_no, String com_no, String name, String works_desc, byte[] img, byte[] vdo,
 			Timestamp upload_date) {
 		super();
 		this.works_no = works_no;
-		this.wtype_no = wtype_no;
 		this.com_no = com_no;
 		this.name = name;
 		this.works_desc = works_desc;
@@ -37,14 +35,6 @@ public class WorksVO implements Serializable{
 
 	public void setWorks_no(String works_no) {
 		this.works_no = works_no;
-	}
-
-	public String getWtype_no() {
-		return wtype_no;
-	}
-
-	public void setWtype_no(String wtype_no) {
-		this.wtype_no = wtype_no;
 	}
 
 	public String getCom_no() {

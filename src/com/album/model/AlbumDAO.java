@@ -1,7 +1,6 @@
 package com.album.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +14,7 @@ import javax.sql.DataSource;
 
 public class AlbumDAO implements AlbumDAO_Interface {
 
-	private static final String CREATE_SQL = "insert into album(alb_no,mem_no,name,cover,create_date) values(ltrim(To_char(alb_sq.nextval,'0009')),?,?,?,CURRENT_TIMESTAMP)";
+	private static final String CREATE_SQL = "insert into album(alb_no,mem_no,name,cover,create_date) values(ltrim(To_char(alb_sq.nextval,'0009')),?,?,?,?)";
 	private static final String DELETE_SQL = "delete from album where alb_no = ?";
 	private static final String UPDATE_SQL = "update album set mem_no=?,name=?,cover=?,create_date=? where alb_no = ?";
 	private static final String FIND_BY_PK = "select * from album where alb_no = ?";
@@ -50,6 +49,7 @@ public class AlbumDAO implements AlbumDAO_Interface {
 			pstmt.setString(1, album.getMem_no());
 			pstmt.setString(2, album.getName());
 			pstmt.setBytes(3, album.getCover());
+			pstmt.setTimestamp(4, album.getCreate_date());
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {
@@ -117,7 +117,6 @@ public class AlbumDAO implements AlbumDAO_Interface {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);

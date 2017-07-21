@@ -14,14 +14,14 @@ import javax.sql.DataSource;
 
 public class ContentDAO implements ContentDAO_Interface {
 
-	private static final String INSERT_SQL = "insert into content(cont_no,alb_no,img,vdo,upload_date,cont_desc) "
-			+ "values(ltrim(To_char(cont_sq.nextval,'0009')),?,?,?,CURRENT_TIMESTAMP,?)";
+	private static final String INSERT_SQL = "insert into content(cont_no,alb_no,upload_date,img,vdo) "
+			+ "values(ltrim(To_char(cont_sq.nextval,'0009')),?,?,?,?)";
 	private static final String DELETE_SQL = "delete from content where cont_no = ?";
-	private static final String UPDATE_SQL = "update content set alb_no=?,img=?,vdo=?,upload_date=?,cont_desc=? where cont_no = ?";
+	private static final String UPDATE_SQL = "update content set alb_no=?,upload_date=?,img=?,vdo=? where cont_no = ?";
 	private static final String FIND_BY_PK = "select * from content where cont_no = ?";
 	private static final String FIND_ALL_BY_ALB_NO = "select * from content where alb_no = ?";
 	private static final String FIND_ALL = "select * from content";
-
+	private static final String COUNT_SQL = "select count(*) from content where alb_no = ? ";
 	private static DataSource ds = null;
 	
 	static{
@@ -47,9 +47,10 @@ public class ContentDAO implements ContentDAO_Interface {
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(INSERT_SQL, cols);
 			pstmt.setString(1, content.getAlb_no());
-			pstmt.setBytes(2, content.getImg());
-			pstmt.setBytes(3, content.getVdo());
-			pstmt.setString(4, content.getCont_desc());
+			pstmt.setTimestamp(2, content.getUpload_date());
+			pstmt.setBytes(3, content.getImg());
+			pstmt.setBytes(4, content.getVdo());
+
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {
@@ -119,17 +120,15 @@ public class ContentDAO implements ContentDAO_Interface {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(UPDATE_SQL);
 			pstmt.setString(1, content.getAlb_no());
-			pstmt.setBytes(2, content.getImg());
-			pstmt.setBytes(3, content.getVdo());
-			pstmt.setTimestamp(4, content.getUpload_date());
-			pstmt.setString(5, content.getCont_desc());
-			pstmt.setString(6, content.getCont_no());
+			pstmt.setTimestamp(2, content.getUpload_date());
+			pstmt.setBytes(3, content.getImg());
+			pstmt.setBytes(4, content.getVdo());
+			pstmt.setString(5, content.getCont_no());
 			pstmt.executeUpdate();
 			conn.commit();
 		} catch (Exception e) {
@@ -169,10 +168,9 @@ public class ContentDAO implements ContentDAO_Interface {
 			content = new ContentVO();
 			content.setCont_no(rs.getString(1));
 			content.setAlb_no(rs.getString(2));
-			content.setImg(rs.getBytes(3));
-			content.setVdo(rs.getBytes(4));
-			content.setUpload_date(rs.getTimestamp(5));
-			content.setCont_desc(rs.getString(6));
+			content.setUpload_date(rs.getTimestamp(3));
+			content.setImg(rs.getBytes(4));
+			content.setVdo(rs.getBytes(5));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -219,10 +217,9 @@ public class ContentDAO implements ContentDAO_Interface {
 				content = new ContentVO();
 				content.setCont_no(rs.getString(1));
 				content.setAlb_no(rs.getString(2));
-				content.setImg(rs.getBytes(3));
-				content.setVdo(rs.getBytes(4));
-				content.setUpload_date(rs.getTimestamp(5));
-				content.setCont_desc(rs.getString(6));
+				content.setUpload_date(rs.getTimestamp(3));
+				content.setImg(rs.getBytes(4));
+				content.setVdo(rs.getBytes(5));
 				contentList.add(content);
 			}
 		} catch (Exception e) {
@@ -268,10 +265,9 @@ public class ContentDAO implements ContentDAO_Interface {
 				content = new ContentVO();
 				content.setCont_no(rs.getString(1));
 				content.setAlb_no(rs.getString(2));
-				content.setImg(rs.getBytes(3));
-				content.setVdo(rs.getBytes(4));
-				content.setUpload_date(rs.getTimestamp(5));
-				content.setCont_desc(rs.getString(6));
+				content.setUpload_date(rs.getTimestamp(3));
+				content.setImg(rs.getBytes(4));
+				content.setVdo(rs.getBytes(5));
 				contentList.add(content);
 			}
 		} catch (Exception e) {
@@ -300,5 +296,40 @@ public class ContentDAO implements ContentDAO_Interface {
 			}
 		}
 		return contentList;
+	}
+
+
+	@Override
+	public int countContentsInSingleAlbum(String alb_no) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int numberOfCont = 0;
+		try {
+			conn = ds.getConnection();
+			pstmt = conn.prepareStatement(COUNT_SQL);
+			pstmt.setString(1, alb_no);
+
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				numberOfCont = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return numberOfCont;
+
 	}
 }

@@ -10,4 +10,5 @@ public interface ContentDAO_Interface {
 	public ContentVO findContentByPK(String cont_no);
 	public List<ContentVO> findContentsByAlbNo(String alb_no);
 	public List<ContentVO> findAll();
+	public int countContentsInSingleAlbum(String alb_no);
 }

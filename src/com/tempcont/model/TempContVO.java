@@ -9,18 +9,17 @@ public class TempContVO implements Serializable {
 	private Timestamp upload_date;
 	private byte[] img;
 	private byte[] vdo;
-	private String tcont_desc;
+	
 	
 	public TempContVO(){}
 
-	public TempContVO(String tcont_no, String temp_no, Timestamp upload_date, byte[] img, byte[] vdo,String tcont_desc) {
+	public TempContVO(String tcont_no, String temp_no, Timestamp upload_date, byte[] img, byte[] vdo) {
 		super();
 		this.tcont_no = tcont_no;
 		this.temp_no = temp_no;
 		this.upload_date = upload_date;
 		this.img = img;
 		this.vdo = vdo;
-		this.tcont_desc = tcont_desc;
 	}
 
 	public String getTcont_no() {
@@ -63,13 +62,4 @@ public class TempContVO implements Serializable {
 		this.upload_date = upload_date;
 	}
 
-	public String getTcont_desc() {
-		return tcont_desc;
-	}
-
-	public void setTcont_desc(String tcont_desc) {
-		this.tcont_desc = tcont_desc;
-	}
-	
-	
 }

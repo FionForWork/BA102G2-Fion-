@@ -11,11 +11,12 @@ public class AlbumService {
 		dao = new AlbumDAO();
 	}
 	
-	public AlbumVO addAlbum(String mem_no,String name, byte[] cover){
+	public AlbumVO addAlbum(String mem_no,String name, byte[] cover, Timestamp create_date){
 		AlbumVO album = new AlbumVO();
 		album.setMem_no(mem_no);
 		album.setName(name);
 		album.setCover(cover);
+		album.setCreate_date(create_date);
 		String alb_no = dao.createAlbum(album);
 		album.setAlb_no(alb_no);
 		return album;

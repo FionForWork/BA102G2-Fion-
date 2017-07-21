@@ -1,0 +1,64 @@
+﻿/* On small screens, set height to 'auto' for sidenav and grid */
+
+@media screen and (max-width: 767px) {
+   
+    .row.content {
+        height: auto;
+    }
+}
+
+.margin-top {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.img-thumbnail {
+    margin-bottom: 10px;
+}
+
+.img-responsive.gallary {
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+.img-responsive.gallary:hover {
+    opacity: 1;
+}
+
+
+.panel {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    border-radius: 0 !important;
+    -webkit-box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.75);
+}
+
+.panel-default {
+    border-color: #ebedef !important;
+}
+
+.panel .panel-body {
+    position: relative;
+    padding: 0px !important;
+    overflow: hidden;
+    height: 200px;
+}
+
+.panel .panel-body a {
+    overflow: hidden;
+}
+
+.panel .panel-body a img {
+    display: block;
+    margin: 0px;
+    padding:0px;
+    width: 100%;
+    height: 100%;
+   
+}
+.createAlbum {
+    margin-bottom: 10px;
+}

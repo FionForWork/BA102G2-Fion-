@@ -11,24 +11,24 @@ public class ContentService {
 		dao = new ContentDAO();
 	}
 	
-	public ContentVO addContent(String alb_no, byte[] img, byte[] vdo, String cont_desc){
+	public ContentVO addContent(String alb_no, Timestamp upload_date, byte[] img, byte[] vdo){
 		ContentVO content = new ContentVO();
 		content.setAlb_no(alb_no);
 		content.setImg(img);
 		content.setVdo(vdo);
-		content.setCont_desc(cont_desc);
-		dao.insertContent(content);
+		content.setUpload_date(upload_date);
+		String cont_no = dao.insertContent(content);
+		content.setCont_no(cont_no);
 		return content;
 	}
 	
-	public ContentVO updateContent(String cont_no, String alb_no, Timestamp upload_date, byte[] img, byte[] vdo, String cont_desc){
+	public ContentVO updateContent(String cont_no, String alb_no, Timestamp upload_date, byte[] img, byte[] vdo){
 		ContentVO content = new ContentVO();
 		content.setCont_no(cont_no);
 		content.setAlb_no(alb_no);
 		content.setUpload_date(upload_date);
 		content.setImg(img);
 		content.setVdo(vdo);
-		content.setCont_desc(cont_desc);
 		dao.updateContent(content);
 		return content;
 
@@ -48,5 +48,9 @@ public class ContentService {
 	
 	public List<ContentVO> getAll(){
 		return dao.findAll();
+	}
+	
+	public int countContentsInSingleAlbum(String alb_no){
+		return dao.countContentsInSingleAlbum(alb_no);
 	}
 }

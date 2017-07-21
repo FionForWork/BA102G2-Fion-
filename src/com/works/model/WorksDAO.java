@@ -15,12 +15,10 @@ import javax.sql.DataSource;
 
 public class WorksDAO implements WorksDAO_Interface {
 
-	private static final String UPLOAD_IMG_SQL = "insert into works(works_no,wtype_no,com_no,name,works_desc,img,upload_date) "
-			+ "values(ltrim(To_char(works_sq.nextval,'0009')),?,?,?,?,?,CURRENT_TIMESTAMP)";
-	private static final String UPLOAD_VDO_SQL = "insert into works(works_no,wtype_no,com_no,name,works_desc,vdo,upload_date) "
-			+ "values(ltrim(To_char(works_sq.nextval,'0009')),?,?,?,?,?,CURRENT_TIMESTAMP)";
+	private static final String INSERT_SQL = "insert into works(works_no,com_no,name,works_desc,img,vdo,upload_date) "
+			+ "values(ltrim(To_char(works_sq.nextval,'0009')),?,?,?,?,?,?)";
 	private static final String DELETE_SQL = "delete from works where works_no = ?";
-	private static final String UPDATE_SQL = "update works set wtype_no=?,com_no=?, name=?, works_desc=? ,img=?,vdo=?,upload_date=? where works_no = ?";
+	private static final String UPDATE_SQL = "update works set com_no=?, name=?, works_desc=? ,img=?,vdo=?,upload_date=? where works_no = ?";
 	private static final String FIND_BY_PK = "select * from works where works_no = ?";
 	private static final String FIND_BY_COM_NO = "select * from works where com_no = ?";
 	private static final String FIND_ALL = "select * from works";
@@ -38,7 +36,7 @@ public class WorksDAO implements WorksDAO_Interface {
 	}
 
 	@Override
-	public String uploadWorksImg(WorksVO works) {
+	public String insertWorks(WorksVO works) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -47,56 +45,13 @@ public class WorksDAO implements WorksDAO_Interface {
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(UPLOAD_IMG_SQL, cols);
-			pstmt.setString(1, works.getWtype_no());
-			pstmt.setString(2, works.getCom_no());
-			pstmt.setString(3, works.getName());
-			pstmt.setString(4, works.getWorks_desc());
-			pstmt.setBytes(5, works.getImg());
-			pstmt.executeUpdate();
-			rs = pstmt.getGeneratedKeys();
-			while (rs.next()) {
-				works_no = rs.getString(1);
-			}
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return works_no;
-	}
-
-	@Override
-	public String uploadWorksVdo(WorksVO works) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String[] cols = { "works_no" };
-		String works_no = "";
-		try {
-			conn = ds.getConnection();
-			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(UPLOAD_VDO_SQL, cols);
-			pstmt.setString(1, works.getWtype_no());
-			pstmt.setString(2, works.getCom_no());
-			pstmt.setString(3, works.getName());
-			pstmt.setString(4, works.getWorks_desc());
+			pstmt = conn.prepareStatement(INSERT_SQL, cols);
+			pstmt.setString(1, works.getCom_no());
+			pstmt.setString(2, works.getName());
+			pstmt.setString(3, works.getWorks_desc());
+			pstmt.setBytes(4, works.getImg());
 			pstmt.setBytes(5, works.getVdo());
+			pstmt.setTimestamp(6, works.getUpload_date());
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {
@@ -168,14 +123,13 @@ public class WorksDAO implements WorksDAO_Interface {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(UPDATE_SQL);
-			pstmt.setString(1, works.getWtype_no());
-			pstmt.setString(2, works.getCom_no());
-			pstmt.setString(3, works.getName());
-			pstmt.setString(4, works.getWorks_desc());
-			pstmt.setBytes(5, works.getImg());
-			pstmt.setBytes(6, works.getVdo());
-			pstmt.setTimestamp(7, works.getUpload_date());
-			pstmt.setString(8, works.getWorks_no());
+			pstmt.setString(1, works.getCom_no());
+			pstmt.setString(2, works.getName());
+			pstmt.setString(3, works.getWorks_desc());
+			pstmt.setBytes(4, works.getImg());
+			pstmt.setBytes(5, works.getVdo());
+			pstmt.setTimestamp(6, works.getUpload_date());
+			pstmt.setString(7, works.getWorks_no());
 			pstmt.executeUpdate();
 			conn.commit();
 		} catch (Exception e) {
@@ -211,8 +165,8 @@ public class WorksDAO implements WorksDAO_Interface {
 			pstmt.setString(1, works_no);
 			rs = pstmt.executeQuery();
 			rs.next();
-			works = new WorksVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-					rs.getBytes(6), rs.getBytes(7), rs.getTimestamp(8));
+			works = new WorksVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+					rs.getBytes(5), rs.getBytes(6), rs.getTimestamp(7));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -255,8 +209,8 @@ public class WorksDAO implements WorksDAO_Interface {
 			pstmt.setString(1, com_no);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				works = new WorksVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getBytes(6), rs.getBytes(7), rs.getTimestamp(8));
+				works = new WorksVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getBytes(5), rs.getBytes(6), rs.getTimestamp(7));
 				worksList.add(works);
 			}
 		} catch (Exception e) {
@@ -299,8 +253,8 @@ public class WorksDAO implements WorksDAO_Interface {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(FIND_ALL);
 			while (rs.next()) {
-				works = new WorksVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getBytes(6), rs.getBytes(7), rs.getTimestamp(8));
+				works = new WorksVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getBytes(5), rs.getBytes(6), rs.getTimestamp(7));
 				worksList.add(works);
 			}
 		} catch (Exception e) {

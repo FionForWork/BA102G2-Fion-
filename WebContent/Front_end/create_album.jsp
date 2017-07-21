@@ -8,15 +8,16 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="" method="post" enctype="multipart/form-data">
+<% session.setAttribute("mem_no","1001"); %>
+	<form action="<%= request.getContextPath() %>/album/album.do" method="post" enctype="multipart/form-data">
 		<table border='2px'>
 			<tr>
 				<td>相簿名稱:</td>
-				<td> <input type='text' value='${java.util.Date }' name='name'> </td>
+				<td> <input type='text' value=' ' name='name'> </td>
 			</tr>
 			<tr>
 				<td>選擇相片</td>
-				<td><input type="file" class="form-control" id="upload" onchange="preview_images()" multiple></td>
+				<td><input type="file" name="uploadPic" class="form-control" id="upload" onchange="preview_images()" multiple></td>
 			</tr>
 			<tr>
 			<td>
@@ -28,5 +29,16 @@
 			</tr>
 		</table>
 	</form>
+	<jsp:useBean id="albSvc" scope="page" class="com.album.model.AlbumService"></jsp:useBean>
+	<table>
+		<c:forEach var="albVO" items="${albSvc.all }" >
+			<tr>
+				<td>${albVO.name }</td>
+				<td><img src='/BA102G2/ShowPictureServletDAO?alb_no=${albVO.alb_no }' width="200"><td>
+				<c:out value="${albVO.alb_no }"></c:out>
+			</tr>
+		
+		</c:forEach>	
+	</table>
 </body>
 </html>

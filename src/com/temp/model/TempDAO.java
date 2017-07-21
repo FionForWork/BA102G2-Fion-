@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 public class TempDAO implements TempDAO_Interface{
 
-	private static final String CREATE_SQL = "insert into temp(temp_no,com_no,mem_no,name,create_date,status) values(ltrim(To_char(temp_sq.nextval,'0009')),?,?,?,CURRENT_TIMESTAMP,?)";
+	private static final String CREATE_SQL = "insert into temp(temp_no,com_no,mem_no,name,create_date,status) values(ltrim(To_char(temp_sq.nextval,'0009')),?,?,?,?,?)";
 	private static final String DELETE_SQL = "delete from temp where temp_no = ?";
 	private static final String UPDATE_SQL = "update temp set com_no=?,mem_no=? ,name=?,create_date=?,status=? where temp_no = ?";
 	private static final String FIND_BY_PK = "select * from temp where temp_no = ?";
@@ -49,7 +49,8 @@ public class TempDAO implements TempDAO_Interface{
 			pstmt.setString(1, temp.getCom_no());
 			pstmt.setString(2, temp.getMem_no());
 			pstmt.setString(3, temp.getName());
-			pstmt.setString(4, temp.getStatus());
+			pstmt.setTimestamp(4, temp.getCreate_date());
+			pstmt.setString(5, temp.getStatus());
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {

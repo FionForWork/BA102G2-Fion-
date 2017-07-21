@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="BIG5">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="UploadPhotoToDBDAO" method="post"
+		enctype="multipart/form-data">
+		<label for="upload1">圖片1</label> 
+		<input type="file" name="upload" id="upload1"><br> 
+		<label for="upload2">圖片2</label> 
+		<input type="file" name="upload" id="upload2"><br> 
+		<label for="upload3">圖片3</label> 
+		<input type="file" name="upload" id="upload3"><br> 
+			<label for="upload4">圖片4</label> 
+			<input type="file" name="upload" id="upload4"><br> 
+			<label for="upload5">圖片5</label> 
+			<input type="file" name="upload" id="upload5"><br>
+		<div id="showPanel"></div>
+		<input type="submit" value="Upload">
+	</form>
+	<script>
+		window.onload = function() {
+			for (var i = 0; i < 5; i++) {
+				var upload = document.getElementsByName("upload")[i]
+						.addEventListener("change", function(e) {
+							var input = e.target;
+							var reader = new FileReader();
+							reader.addEventListener("load", function() {
+								image = document.createElement("img");
+								image.setAttribute("src", this.result);
+								image.setAttribute("height", 200);
+								document.getElementById("showPanel")
+										.appendChild(image);
+							}, false);
+							reader.readAsDataURL(input.files[0]);
+						}, false);
+			}
+
+		};
+	</script>
+</body>
+</html>

@@ -14,12 +14,10 @@ import javax.sql.DataSource;
 
 public class TempContDAO implements TempContDAO_Interface {
 
-	private static final String UPLOAD_IMG_SQL = "insert into tempcont(tcont_no,temp_no,upload_date,img,tcont_desc) "
-			+ "values(ltrim(To_char(tempcont_sq.nextval,'0009')),?,CURRENT_TIMESTAMP,?,?)";
-	private static final String UPLOAD_VDO_SQL = "insert into tempcont(tcont_no,temp_no,upload_date,vdo,tcont_desc) "
-			+ "values(ltrim(To_char(tempcont_sq.nextval,'0009')),?,CURRENT_TIMESTAMP,?,?)";
+	private static final String INSERT_SQL = "insert into tempcont(tcont_no,temp_no,upload_date,img,vdo) "
+			+ "values(ltrim(To_char(tempcont_sq.nextval,'0009')),?,?,?,?)";
 	private static final String DELETE_SQL = "delete from tempcont where tcont_no = ?";
-	private static final String UPDATE_SQL = "update tempcont set temp_no=?,img=?,vdo=?,upload_date=?,tcont_desc=? where tcont_no = ?";
+	private static final String UPDATE_SQL = "update tempcont set temp_no=?,upload_date=?,img=?,vdo=? where tcont_no = ?";
 	private static final String FIND_BY_PK = "select * from tempcont where tcont_no = ?";
 	private static final String FIND_ALL_BY_TEMP_NO = "select * from tempcont where temp_no = ?";
 	private static final String FIND_ALL = "select * from tempcont";
@@ -37,7 +35,7 @@ public class TempContDAO implements TempContDAO_Interface {
 	}
 
 	@Override
-	public String uploadImg(TempContVO tempcont) {
+	public String insertTempCont(TempContVO tempcont) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -46,52 +44,11 @@ public class TempContDAO implements TempContDAO_Interface {
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(UPLOAD_IMG_SQL, cols);
+			pstmt = conn.prepareStatement(INSERT_SQL, cols);
 			pstmt.setString(1, tempcont.getTemp_no());
-			pstmt.setBytes(2, tempcont.getImg());
-			pstmt.setString(3, tempcont.getTcont_desc());
-			pstmt.executeUpdate();
-			rs = pstmt.getGeneratedKeys();
-			while (rs.next()) {
-				tcont_no = rs.getString(1);
-			}
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return tcont_no;
-	}
-
-	@Override
-	public String uploadVdo(TempContVO tempcont) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String[] cols = { "tcont_no" };
-		String tcont_no = "";
-		try {
-			conn = ds.getConnection();
-			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(UPLOAD_VDO_SQL, cols);
-			pstmt.setString(1, tempcont.getTemp_no());
-			pstmt.setBytes(2, tempcont.getVdo());
-			pstmt.setString(3, tempcont.getTcont_desc());
+			pstmt.setTimestamp(2, tempcont.getUpload_date());
+			pstmt.setBytes(3, tempcont.getImg());
+			pstmt.setBytes(4, tempcont.getVdo());
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
 			while (rs.next()) {
@@ -159,17 +116,15 @@ public class TempContDAO implements TempContDAO_Interface {
 	public void updateTempCont(TempContVO tempcont) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(UPDATE_SQL);
 			pstmt.setString(1, tempcont.getTemp_no());
-			pstmt.setBytes(2, tempcont.getImg());
-			pstmt.setBytes(3, tempcont.getVdo());
-			pstmt.setTimestamp(4, tempcont.getUpload_date());
-			pstmt.setString(5, tempcont.getTcont_desc());
-			pstmt.setString(6, tempcont.getTcont_no());
+			pstmt.setTimestamp(2, tempcont.getUpload_date());
+			pstmt.setBytes(3, tempcont.getImg());
+			pstmt.setBytes(4, tempcont.getVdo());
+			pstmt.setString(5, tempcont.getTcont_no());
 			pstmt.executeUpdate();
 			conn.commit();
 		} catch (Exception e) {
@@ -206,8 +161,12 @@ public class TempContDAO implements TempContDAO_Interface {
 			pstmt.setString(1, tcont_no);
 			rs = pstmt.executeQuery();
 			rs.next();
-			tempcont = new TempContVO(rs.getString(1), rs.getString(2), rs.getTimestamp(3), rs.getBytes(4),
-					rs.getBytes(5), rs.getString(6));
+			tempcont = new TempContVO();
+			tempcont.setTcont_no(rs.getString(1));
+			tempcont.setTemp_no(rs.getString(2));
+			tempcont.setUpload_date(rs.getTimestamp(3));
+			tempcont.setImg(rs.getBytes(4));
+			tempcont.setVdo(rs.getBytes(5));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -250,8 +209,12 @@ public class TempContDAO implements TempContDAO_Interface {
 			pstmt.setString(1, temp_no);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				tempcont = new TempContVO(rs.getString(1), rs.getString(2), rs.getTimestamp(3), rs.getBytes(4),
-						rs.getBytes(5), rs.getString(6));
+				tempcont = new TempContVO();
+				tempcont.setTcont_no(rs.getString(1));
+				tempcont.setTemp_no(rs.getString(2));
+				tempcont.setUpload_date(rs.getTimestamp(3));
+				tempcont.setImg(rs.getBytes(4));
+				tempcont.setVdo(rs.getBytes(5));
 				tempcontList.add(tempcont);
 			}
 		} catch (Exception e) {
@@ -294,8 +257,12 @@ public class TempContDAO implements TempContDAO_Interface {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(FIND_ALL);
 			while (rs.next()) {
-				tempcont = new TempContVO(rs.getString(1), rs.getString(2), rs.getTimestamp(3), rs.getBytes(4),
-						rs.getBytes(3), rs.getString(6));
+				tempcont = new TempContVO();
+				tempcont.setTcont_no(rs.getString(1));
+				tempcont.setTemp_no(rs.getString(2));
+				tempcont.setUpload_date(rs.getTimestamp(3));
+				tempcont.setImg(rs.getBytes(4));
+				tempcont.setVdo(rs.getBytes(5));
 				tempcontList.add(tempcont);
 			}
 		} catch (Exception e) {

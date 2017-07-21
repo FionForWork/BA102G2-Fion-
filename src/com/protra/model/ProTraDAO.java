@@ -9,8 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comtra.model.ComTraVO;
-
 public class ProTraDAO implements ProTraDAO_Interface{
 
 	private static final String INSERT_SQL = "insert into protra(protra_no,pro_no,mem_no) values(ltrim(To_char(protra_sq.nextval,'0009')),?,?)";
@@ -107,7 +105,6 @@ public class ProTraDAO implements ProTraDAO_Interface{
 	public void updateProTra(ProTraVO proTra) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		try {
 			Class.forName(DRIVER);
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);

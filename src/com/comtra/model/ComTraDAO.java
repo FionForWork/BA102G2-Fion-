@@ -68,7 +68,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 	}
 
 	@Override
-	public void deleteComTra(String comTra_no) {
+	public void deleteComTra(String comtra_no) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -77,7 +77,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(DELETE_SQL);
-			pstmt.setString(1, comTra_no);
+			pstmt.setString(1, comtra_no);
 			pstmt.executeUpdate();
 			conn.commit();
 
@@ -140,7 +140,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 	}
 
 	@Override
-	public ComTraVO findComTraByPK(String comTra_no) {
+	public ComTraVO findComTraByPK(String comtra_no) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -149,7 +149,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 			Class.forName(DRIVER);
 			conn = DriverManager.getConnection(URL, USERNAME, PWD);
 			pstmt = conn.prepareStatement(FIND_BY_PK);
-			pstmt.setString(1, comTra_no);
+			pstmt.setString(1, comtra_no);
 			rs = pstmt.executeQuery();
 			rs.next();
 			comTra = new ComTraVO(rs.getString(1),rs.getString(2),rs.getString(3));
