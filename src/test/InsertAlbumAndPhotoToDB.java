@@ -18,41 +18,46 @@ import com.content.model.ContentVO;
 
 public class InsertAlbumAndPhotoToDB {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
-		int numberOfPic = 33;
+		int numberOfPic = 30;
 		List<String> names = new ArrayList<String>();
-		names.add("愛在夕陽裡");
-		names.add("Follow Me!");
-		names.add("My Wedding Day~");
-		String[] mems = { "1001", "1002", "1003" };
+		names.add("墾丁拍攝");names.add("白沙灣婚紗攝影作品");
+		names.add("花蓮攝影挑選"); names.add("愛在夕陽裡");
+		
+		
 		AlbumJDBCDAO albSvc;
 		AlbumVO alb = null;
 		ContentVO cont = null;
 		ContentJDBCDAO contSvc;
+		String[] mems = new String[3]; 
+		int start = 1;
 		
-		
-		for (int i = 0; i < names.size(); i++) {
+		for(int i = 0; i < 3; i ++){
+			mems[i] = String.valueOf(i+1001);
+		}
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		ByteArrayOutputStream baos = null;
+		for (int i = 0; i < 30 ; i++) {
 			System.out.println("1111111111111");
 			albSvc = new AlbumJDBCDAO();
 			String alb_no = null;
-			for (int j = 1; j <= numberOfPic; j++) {
+			
+			for (int j = start; j <= numberOfPic; j++) {
 				System.out.println("222222222222222222");
 				String path = "C:\\Users\\mac\\Dropbox\\test\\" + j + ".jpg";
-				FileInputStream fis = null;
-				BufferedInputStream bis = null;
-				ByteArrayOutputStream baos = null;
 				
-				try {
+				
 					fis = new FileInputStream(path);
 					bis = new BufferedInputStream(fis);
 					baos = new ByteArrayOutputStream();
-					byte[] pics = new byte[1024];
+					byte[] pics = new byte[2048];
 					int length = 0;
 					while ((length = bis.read(pics)) != -1) {
 						baos.write(pics, 0, length);
 					}
-					if (j == 1) {
+					if (j == start) {
 						System.out.println("33333333333333333");
 						alb = new AlbumVO();
 						alb.setMem_no(mems[i]);
@@ -62,46 +67,32 @@ public class InsertAlbumAndPhotoToDB {
 						alb_no = albSvc.createAlbum(alb);
 						System.out.println("alb_no---------------------"+alb_no);
 					}
-					
-					
 					contSvc = new ContentJDBCDAO();
 					cont = new ContentVO();
 					System.out.println("========"+alb_no);
+					System.out.println("baos"+baos.size());
 					cont.setAlb_no(alb_no);
-					cont.setUpload_date(new Timestamp(System.currentTimeMillis()));
+					System.out.println("========111"+alb_no);
+					Timestamp upload_date = new Timestamp(System.currentTimeMillis());
+					cont.setUpload_date(upload_date);
+					System.out.println("========2222"+upload_date);
 					cont.setImg(baos.toByteArray());
+					System.out.println("========333");
+					cont.setVdo(null);
+					System.out.println("========444"+cont.toString());
+					System.out.println(alb_no);
 					contSvc.insertContent(cont);
 
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (baos != null) {
-						try {
-							baos.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					if (bis != null) {
-						try {
-							bis.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					if (fis != null) {
-						try {
-							fis.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
+				
 			}
+			
+			start= start+30;
+			System.out.println("start::::"+start);
+			numberOfPic = numberOfPic+30;
+			fis.close();
+			bis.close();
+			baos.close();
 		}
+		
 	}
 }

@@ -37,6 +37,7 @@ public class AlbServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("action");
+		System.out.println("@@@@@@@");
 		
 		/*********   查詢單本相簿內容       *********/
 		if ("getOne_For_Display".equals(action)) {
@@ -56,6 +57,7 @@ public class AlbServlet extends HttpServlet {
 			ContentService contSvc = new ContentService();
 			
 			String alb_no = request.getParameter("alb_no");
+			System.out.println("alb_no"+alb_no);
 			List<ContentVO> conts = contSvc.getAllByAlbNo(alb_no);
 			for(ContentVO cont : conts){
 				contSvc.deleteContent(cont.getCont_no());
@@ -64,7 +66,7 @@ public class AlbServlet extends HttpServlet {
 			albSvc.deleteAlbum(alb_no);
 			
 			/*********   回到相簿列表       *********/
-			String url = "/BA102G2/Front_end/Album/ListAllAlbums.jsp";
+			String url = "/Front_end/Album/ListAllAlbums.jsp";
 			request.getRequestDispatcher(url).forward(request, response);
 			return;
 		}

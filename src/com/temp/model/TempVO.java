@@ -9,17 +9,19 @@ public class TempVO implements Serializable {
 	private String mem_no;
 	private String name;
 	private Timestamp create_date;
+	private Integer available;
 	private String status;
 	
 	public TempVO(){}
 
-	public TempVO(String temp_no, String com_no, String mem_no, String name,Timestamp create_date, String status) {
+	public TempVO(String temp_no, String com_no, String mem_no, String name,Timestamp create_date,Integer available, String status) {
 		super();
 		this.temp_no = temp_no;
 		this.com_no = com_no;
 		this.mem_no = mem_no;
 		this.name = name;
 		this.create_date = create_date;
+		this.available = available;
 		this.status = status;
 	}
 
@@ -61,6 +63,14 @@ public class TempVO implements Serializable {
 
 	public void setCreate_date(Timestamp create_date) {
 		this.create_date = create_date;
+	}
+	
+	public Integer getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(Integer available) {
+		this.available = available;
 	}
 
 	public String getStatus() {

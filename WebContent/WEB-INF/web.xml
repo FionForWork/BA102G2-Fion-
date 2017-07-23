@@ -24,6 +24,14 @@
     <url-pattern>/album/album.do</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>TempServlet</servlet-name>
+    <servlet-class>com.temp.controller.TempServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TempServlet</servlet-name>
+    <url-pattern>/temp/temp.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>ContentServlet</servlet-name>
     <servlet-class>com.content.controller.ContentServlet</servlet-class>
   </servlet>

@@ -3,6 +3,8 @@ $(document).ready(function(){
         $("#albumModal").modal();
     });
     
+    
+        
 });
 
 
@@ -14,12 +16,4 @@ $(document).ready(function(){
       $('#showPanel').append("<div class='col-xs-12 col-sm-4 text-right'><img class='img-responsive preview' src='"+
       	URL.createObjectURL(event.target.files[i])+"'><span class='glyphicon glyphicon-remove'></span></div>");
      }
-}
-function deleteAlb(){
-	var r = confirm("確定刪除此相簿嗎?");
-	if(r == true){
-		document.getElementById('deleteForm').submit();
-	}else{
-		
-	}
 }
