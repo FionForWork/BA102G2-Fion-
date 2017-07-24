@@ -9,6 +9,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class ComTraDAO implements ComTraDAO_Interface {
 
 	
@@ -19,10 +23,18 @@ public class ComTraDAO implements ComTraDAO_Interface {
 	private static final String FIND_BY_MEM_NO = "select * from comtra where mem_no=?";
 	private static final String FIND_ALL = "select * from comtra";
 
-	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
-	private static final String USERNAME = "model";
-	private static final String PWD = "model";
+private static DataSource ds = null;
+	
+	static{
+		Context ctx;
+		try {
+			ctx = new javax.naming.InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA102G2DB");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	@Override
@@ -33,8 +45,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 		String[] cols = { "comtra_no" };
 		String comtra_no ="";
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(INSERT_SQL, cols);
 			pstmt.setString(1, comTra.getCom_no());
@@ -73,8 +84,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(DELETE_SQL);
 			pstmt.setString(1, comtra_no);
@@ -109,8 +119,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(UPDATE_SQL);
 			pstmt.setString(1, comTra.getCom_no());
@@ -146,8 +155,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 		ResultSet rs = null;
 		ComTraVO comTra = null;
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(FIND_BY_PK);
 			pstmt.setString(1, comtra_no);
 			rs = pstmt.executeQuery();
@@ -189,8 +197,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 		ComTraVO comTra = null;
 		List<ComTraVO> comTraList = new ArrayList<>();
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(FIND_BY_MEM_NO);
 			pstmt.setString(1, mem_no);
 			rs = pstmt.executeQuery();
@@ -234,8 +241,7 @@ public class ComTraDAO implements ComTraDAO_Interface {
 		ComTraVO comTra = null;
 		List<ComTraVO> comTraList = new ArrayList<>();
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(FIND_ALL);
 			while (rs.next()) {

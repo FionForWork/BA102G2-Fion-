@@ -29,7 +29,7 @@ public class TempDAO implements TempDAO_Interface{
 		Context ctx;
 		try {
 			ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/ModelDB");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA102G2DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

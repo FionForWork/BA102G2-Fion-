@@ -81,7 +81,7 @@
 					<input type="hidden" name="action" value="getOne_For_Display">
 					<a id="displayAnc" href="#" onclick="document.getElementById('display${s.count}').submit();"> 
 					<img
-						src='/BA102G2/ShowPictureServletDAO?alb_no=${albVO.alb_no }'
+						src='<%=request.getContextPath() %>/ShowPictureServletDAO?alb_no=${albVO.alb_no }'
 						class="img-responsive gallery" class="img-responsive" style="width:100%" alt="Image">
 					</a>
 					</form>

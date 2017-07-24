@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="BA102G2(Fion)">
+    <wb-module deploy-name="BA102G2_Fion">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="java-output-path" value="/BA102G2(Fion)/build/classes"/>
-        <property name="context-root" value="BA102G2(Fion)"/>
+        <property name="java-output-path" value="/BA102G2_Fion/build/classes"/>
+        <property name="context-root" value="BA102G2_Fion"/>
     </wb-module>
 </project-modules>

@@ -9,6 +9,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class ProTraDAO implements ProTraDAO_Interface{
 
 	private static final String INSERT_SQL = "insert into protra(protra_no,pro_no,mem_no) values(ltrim(To_char(protra_sq.nextval,'0009')),?,?)";
@@ -18,10 +22,19 @@ public class ProTraDAO implements ProTraDAO_Interface{
 	private static final String FIND_BY_MEM_NO = "select * from protra where mem_no=?";
 	private static final String FIND_ALL = "select * from protra";
 
-	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
-	private static final String USERNAME = "model";
-	private static final String PWD = "model";
+	private static DataSource ds = null;
+	
+	static{
+		Context ctx;
+		try {
+			ctx = new javax.naming.InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA102G2DB");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	
 	@Override
 	public String insertProTra(ProTraVO proTra) {
@@ -31,8 +44,7 @@ public class ProTraDAO implements ProTraDAO_Interface{
 		String[] cols = { "protra_no" };
 		String protra_no ="";
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(INSERT_SQL, cols);
 			pstmt.setString(1, proTra.getPro_no());
@@ -71,8 +83,7 @@ public class ProTraDAO implements ProTraDAO_Interface{
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(DELETE_SQL);
 			pstmt.setString(1, protra_no);
@@ -106,8 +117,7 @@ public class ProTraDAO implements ProTraDAO_Interface{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(UPDATE_SQL);
 			pstmt.setString(1, proTra.getPro_no());
@@ -144,8 +154,7 @@ public class ProTraDAO implements ProTraDAO_Interface{
 		ResultSet rs = null;
 		ProTraVO proTra = null;
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(FIND_BY_PK);
 			pstmt.setString(1, protra_no);
 			rs = pstmt.executeQuery();
@@ -187,8 +196,7 @@ public class ProTraDAO implements ProTraDAO_Interface{
 		ProTraVO comTra = null;
 		List<ProTraVO> comTraList = new ArrayList<>();
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(FIND_BY_MEM_NO);
 			pstmt.setString(1, mem_no);
 			rs = pstmt.executeQuery();
@@ -232,8 +240,7 @@ public class ProTraDAO implements ProTraDAO_Interface{
 		ProTraVO proTra = null;
 		List<ProTraVO> proTraList = new ArrayList<>();
 		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PWD);
+			conn = ds.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(FIND_ALL);
 			while (rs.next()) {
