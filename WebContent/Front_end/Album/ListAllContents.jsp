@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-	pageEncoding="BIG5"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
@@ -20,7 +20,7 @@
 	<!-- Photo Start Here -->
 	<div class="jumbotron text-center">
 		<div class="text-right">
-			<button type="submit" class="btn btn-default" id="uploadbtn">�s�W�ۤ�</button>
+			<button type="submit" class="btn btn-default" id="uploadbtn">新增相片</button>
 		</div>
 		<!-- Modal addContent -->
 		<form action="<%=request.getContextPath()%>/content/content.do"
@@ -33,19 +33,19 @@
 						<div class="modal-header" style="padding: 35px 50px;">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4>
-								<span class="glyphicon glyphicon-picture"></span> �W�ǷӤ�
+								<span class="glyphicon glyphicon-picture"></span> 上傳照片
 							</h4>
 						</div>
 						<div class="modal-body" style="padding: 40px 50px;">
 							<div class="form-group">
-								<label for="upload"> ��ܷӤ�</label> <input type="file"
+								<label for="upload"> 選擇照片</label> <input type="file"
 									class="form-control" name="uploadPic" id="upload"
 									onchange="preview_images()" multiple>
 							</div>
 
 							<div id="showPanel"></div>
 
-							<input type='submit' class="btn btn-info btn-block" value="�s�W">
+							<input type='submit' class="btn btn-info btn-block" value="新增">
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-default pull-left"
@@ -68,15 +68,15 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">�R���ۤ�</h4>
+						<h4 class="modal-title">刪除相片</h4>
 					</div>
 					<div class="modal-body">
-						<p>�R���ۤ���N�L�k�_��A�T�w�R����?</p>
+						<p>刪除相片後將無法復原，確定刪除嗎?</p>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">����</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 						
-						<button type="button" class="btn btn-danger" data-dismiss="modal" id='deletebtn'>�R��</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id='deletebtn'>刪除</button>
 						
 					</div>
 				</div>
@@ -113,14 +113,14 @@
 						<input type='hidden' name='action' value='setCover'>
 						<input type='hidden' name='cont_no' value='${contVO.cont_no}'>
 						<input type='hidden' name='alb_no' value='<%=alb_no%>'>
-						<a href='#' id='setCover' onclick="document.getElementById('update${s.count}').submit();">�]���ʭ�</a>
+						<a href='#' id='setCover' onclick="document.getElementById('update${s.count}').submit();">設成封面</a>
 					</form>	
 						<form id="delete${s.count}" action="<%=request.getContextPath()%>/content/content.do" method="post">
 						<input type='hidden' name='cont_no' value='${contVO.cont_no}'>
 						<input type='hidden' name='action' value='delete_Content'>
 						<input type='hidden' name='alb_no' value='<%=alb_no%>'>
-						<a href='#' onclick="document.getElementById('delete${s.count}').submit();" >�R���ۤ�</a>
-<!-- 						<a href='#' data-toggle="modal" data-target="#deleteModal">�R���ۤ�</a> -->
+						<a href='#' onclick="document.getElementById('delete${s.count}').submit();" >刪除相片</a>
+<!-- 						<a href='#' data-toggle="modal" data-target="#deleteModal">刪除相片</a> -->
 						</form>
 					</div>
 				</div>

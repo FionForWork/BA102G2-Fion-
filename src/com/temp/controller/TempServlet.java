@@ -86,14 +86,21 @@ public class TempServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 		
 			Collection<Part> parts = request.getParts();
-			if(parts.isEmpty() || parts == null){
-				errorMsgs.put("file","請選擇照片或影片" );
+			System.out.println("part size"+parts.size());
+			forloop:
+			for(Part part: parts){		
+				System.out.println("!!!!!!");
+				errorMsgs.put("file","(請選擇照片或影片)" );
+				if(getFileNameFromPart(part) != null && part.getContentType() != null){
+					System.out.println("~~~~");
+					errorMsgs.remove("file");
+					break forloop;
+				}
 			}
-			
 			// ===== 檢查作品名稱 ===== //
 			String name = request.getParameter("name").trim();
 			if (name.length() == 0) {
-				errorMsgs.put("name", "請輸入作品名稱");
+				errorMsgs.put("name", "(請輸入作品名稱)");
 			}
 			
 			String mem_no = request.getParameter("mem_no");
@@ -101,20 +108,25 @@ public class TempServlet extends HttpServlet {
 			// ===== 檢查可挑選張數 ===== //
 			Integer available = null;
 			try{
+				
 				available = new Integer(request.getParameter("available").trim());
+				if(available > parts.size()){
+					errorMsgs.put("available_number", "(照片不夠選阿!!!)");
+				}
+				
 			}catch(NumberFormatException e){
-				errorMsgs.put("available_empty", "請輸入可挑選張數");
+				errorMsgs.put("available_empty", "(請輸入可挑選數量)");
+			}catch(NullPointerException e){
+				errorMsgs.put("available_empty", "(請輸入可挑選張數)");
 			}
-			if(available < parts.size()){
-				errorMsgs.put("available_number", "照片不夠選阿!!!");
-			}
+			
 			
 			// ===== 檢查拍攝日期是否為空值 ===== //
 			Timestamp create_date = null;
 			try{
 				create_date = covertToTimestamp(request.getParameter("create_date"));
 			}catch(NullPointerException e){
-				errorMsgs.put("create_date", "請輸入拍攝日期");
+				errorMsgs.put("create_date", "(請輸入拍攝日期)");
 			}
 			
 			String status = "未挑選";
@@ -131,7 +143,7 @@ public class TempServlet extends HttpServlet {
 			if(!errorMsgs.isEmpty()){
 				request.setAttribute("temp", temp);
 				RequestDispatcher failureView = request
-						.getRequestDispatcher("/Front_end/create_temp.jsp");
+						.getRequestDispatcher("/Front_end/Temp/create_temp.jsp");
 				failureView.forward(request, response);
 				return; 
 			}

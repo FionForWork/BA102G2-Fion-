@@ -1,17 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-	pageEncoding="BIG5"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<jsp:useBean id="contSvc" scope="page"
-	class="com.content.model.ContentService"></jsp:useBean>
-<jsp:useBean id="albSvc" scope="page"
-	class="com.album.model.AlbumService"></jsp:useBean>
+<jsp:useBean id="tempContSvc" scope="page"
+	class="com.tempcont.model.TempContService"></jsp:useBean>
+<jsp:useBean id="tempSvc" scope="page"
+	class="com.temp.model.TempService"></jsp:useBean>
 
 <%
-	String alb_no = (String) request.getAttribute("alb_no");
-	// 	String alb_no = "0001";
-	// 	session.setAttribute("alb_no","0001");
+	String temp_no = (String) request.getAttribute("temp_no");
+	// 	String temp_no = "0001";
+	// 	session.setAttribute("temp_no","0001");
 %>
 
 <%@ include file="page/photo_header.file"%>
@@ -20,7 +20,7 @@
 	<!-- Photo Start Here -->
 	<div class="jumbotron text-center">
 		<div class="text-right">
-			<button type="submit" class="btn btn-default" id="uploadbtn">·s¼W¬Û¤ù</button>
+			<button type="submit" class="btn btn-default" id="uploadbtn">æ–°å¢ç›¸ç‰‡</button>
 		</div>
 		<!-- Modal addContent -->
 		<form action="<%=request.getContextPath()%>/content/content.do"
@@ -33,19 +33,19 @@
 						<div class="modal-header" style="padding: 35px 50px;">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4>
-								<span class="glyphicon glyphicon-picture"></span> ¤W¶Ç·Ó¤ù
+								<span class="glyphicon glyphicon-picture"></span> ä¸Šå‚³ç…§ç‰‡
 							</h4>
 						</div>
 						<div class="modal-body" style="padding: 40px 50px;">
 							<div class="form-group">
-								<label for="upload"> ¿ï¾Ü·Ó¤ù</label> <input type="file"
+								<label for="upload"> é¸æ“‡ç…§ç‰‡</label> <input type="file"
 									class="form-control" name="uploadPic" id="upload"
 									onchange="preview_images()" multiple>
 							</div>
 
 							<div id="showPanel"></div>
 
-							<input type='submit' class="btn btn-info btn-block" value="·s¼W">
+							<input type='submit' class="btn btn-info btn-block" value="æ–°å¢">
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-default pull-left"
@@ -53,7 +53,7 @@
 								<span class="glyphicon glyphicon-remove"></span> Cancel
 							</button>
 							<input type='hidden' name='action' value='insert_Content'>
-							<input type='hidden' name='alb_no' value='<%=alb_no%>'>
+							<input type='hidden' name='alb_no' value='<%=temp_no%>'>
 						</div>
 					</div>
 				</div>
@@ -68,15 +68,15 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">§R°£¬Û¤ù</h4>
+						<h4 class="modal-title">åˆªé™¤ç›¸ç‰‡</h4>
 					</div>
 					<div class="modal-body">
-						<p>§R°£¬Û¤ù«á±NµLªk´_­ì¡A½T©w§R°£¶Ü?</p>
+						<p>åˆªé™¤ç›¸ç‰‡å¾Œå°‡ç„¡æ³•å¾©åŸï¼Œç¢ºå®šåˆªé™¤å—?</p>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">¨ú®ø</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">å–æ¶ˆ</button>
 						
-						<button type="button" class="btn btn-danger" data-dismiss="modal" id='deletebtn'>§R°£</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id='deletebtn'>åˆªé™¤</button>
 						
 					</div>
 				</div>
@@ -84,11 +84,10 @@
 			</div>
 		</div>
 		<!--  End Modal Delete Content -->
-		<h2>${albSvc.getOneAlbum(alb_no).name}</h2>
+		<h2>${TempSvc.getOneTemp(temp_no).name}</h2>
 	</div>
 	
-	<c:forEach var="contVO" items="${contSvc.getAllByAlbNo(alb_no)}"
-		varStatus="s">
+	<c:forEach var="tempContVO" items="${tempContSvc.getAllByTempNo(temp_no)}" varStatus="s">
 		<c:if test="${(s.count % 4) == 1}">
 			<div class="row">
 		</c:if>
@@ -97,11 +96,11 @@
 			<div class="image">
 
 				<a
-					href="<%=request.getContextPath()%>/ShowPictureServletDAO?cont_no=${contVO.cont_no }"
+					href="<%=request.getContextPath()%>/ShowPictureServletDAO?tcont_no=${tempContVO.tcont_no }"
 					data-caption="Image caption" target="_blank"> 
 					<img
 					class="img-responsive img-thumbnail"
-					src="<%=request.getContextPath()%>/ShowPictureServletDAO?cont_no=${contVO.cont_no }" />
+					src="<%=request.getContextPath()%>/ShowPictureServletDAO?tcont_no=${tempContVO.tcont_no }" />
 				</a>
 				<div class="overlap dropdown">
 					<button class="btn btn-default btn-xs" type="submit"
@@ -109,18 +108,13 @@
 						<i class="fa fa-cog" aria-hidden="true"></i>
 					</button>
 					<div class='dropdownContent' id='dropdownContent${s.count}'>
-					<form id="update${s.count}" action="<%=request.getContextPath()%>/content/content.do" method="post">
-						<input type='hidden' name='action' value='setCover'>
-						<input type='hidden' name='cont_no' value='${contVO.cont_no}'>
-						<input type='hidden' name='alb_no' value='<%=alb_no%>'>
-						<a href='#' id='setCover' onclick="document.getElementById('update${s.count}').submit();">³]¦¨«Ê­±</a>
-					</form>	
+					
 						<form id="delete${s.count}" action="<%=request.getContextPath()%>/content/content.do" method="post">
-						<input type='hidden' name='cont_no' value='${contVO.cont_no}'>
+						<input type='hidden' name='cont_no' value='${tempContVO.tcont_no}'>
 						<input type='hidden' name='action' value='delete_Content'>
-						<input type='hidden' name='alb_no' value='<%=alb_no%>'>
-						<a href='#' onclick="document.getElementById('delete${s.count}').submit();" >§R°£¬Û¤ù</a>
-<!-- 						<a href='#' data-toggle="modal" data-target="#deleteModal">§R°£¬Û¤ù</a> -->
+						<input type='hidden' name='alb_no' value='<%=temp_no%>'>
+						<a href='#' onclick="document.getElementById('delete${s.count}').submit();" >åˆªé™¤ç›¸ç‰‡</a>
+<!-- 						<a href='#' data-toggle="modal" data-target="#deleteModal">åˆªé™¤ç›¸ç‰‡</a> -->
 						</form>
 					</div>
 				</div>

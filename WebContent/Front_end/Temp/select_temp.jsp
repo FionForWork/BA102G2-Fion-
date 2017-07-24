@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-	pageEncoding="BIG5"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
@@ -37,46 +39,51 @@
 }
 </style>
 </head>
+
 <body>
+
+<jsp:useBean id="tempSvc" scope="page" class="com.temp.model.TempService"/>
+<% 
+	//String com_no = (String)session.getAttribute("com_no");  
+	String com_no = "2001";
+	session.setAttribute("com_no",com_no);
+
+%>
+
 	<div class="container">
 		<div class="row">
-
 			<div class="col-xs-12 col-sm-9">
 				<table class="table table-hover table-responsive" id="tempList">
-					<caption>¦¨«~¬D¿ï²M³æ</caption>
+					<caption>æˆå“æŒ‘é¸æ¸…å–®</caption>
 					<thead>
 						<tr>
-							<th>«İ¬D¿ï§@«~</th>
-							<th>¼t°Ó¦WºÙ</th>
-							<th>¥i¬D¿ï±i¼Æ</th>
-							<th>©çÄá®É¶¡</th>
+							<th>#</th>
+							<th>å¾…æŒ‘é¸ä½œå“</th>
+							<th>å» å•†åç¨±</th>
+							<th>å¯æŒ‘é¸å¼µæ•¸</th>
+							<th>æ‹æ”æ™‚é–“</th>
+							<th>ç‹€æ…‹</th>
+							<th></th>
+							<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
+					<c:forEach var="tempVO" items="${tempSvc.getAllByComNo(com_no)}" varStatus="s">
 						<tr>
-							<td>¥Õ¨FÆW©çÄá</td>
-							<td>¶W§¹¬ü±BÄá¤½¥q</td>
-							<td>36</td>
-							<td>2017/07/12</td>
+					
+							<td>${s.count}</td>
+							<td>${tempVO.name }</td>
+							<td>è¶…å®Œç¾å©šæ”å…¬å¸</td>
+							<td>${tempVO.available}</td>
+							<td>${tempVO.create_date}</td>
+							<td>${tempVO.status}</td>
+							<td><input type='submit' value='æŸ¥çœ‹' name='displayTemp'></td>
+							<td><input type='submit' value='ä¿®æ”¹' name='updateTemp'></td>
+							<td><input type='submit' value='åˆªé™¤' name='deleteTemp'></td>
 						</tr>
-						<tr>
-							<td>¥Õ¨FÆW©çÄá</td>
-							<td>¶W§¹¬ü±BÄá¤½¥q</td>
-							<td>36</td>
-							<td>2017/07/12</td>
-						</tr>
-						<tr>
-							<td>¥Õ¨FÆW©çÄá</td>
-							<td>¶W§¹¬ü±BÄá¤½¥q</td>
-							<td>36</td>
-							<td>2017/07/12</td>
-						</tr>
-						<tr>
-							<td>¥Õ¨FÆW©çÄá</td>
-							<td>¶W§¹¬ü±BÄá¤½¥q</td>
-							<td>36</td>
-							<td>2017/07/12</td>
-						</tr>
+					</c:forEach>	
+											
 					</tbody>
 				</table>
 			</div>

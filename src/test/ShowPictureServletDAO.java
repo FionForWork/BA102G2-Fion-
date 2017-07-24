@@ -15,6 +15,8 @@ import com.album.model.AlbumService;
 import com.album.model.AlbumVO;
 import com.content.model.ContentService;
 import com.content.model.ContentVO;
+import com.tempcont.model.TempContService;
+import com.tempcont.model.TempContVO;
 
 public class ShowPictureServletDAO extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +49,21 @@ public class ShowPictureServletDAO extends HttpServlet {
 				cont = contVO.getImg();
 			}
 			out.write(cont);
+			out.close(); 
+			return;
+		}
+		if(file.startsWith("tcont_no")){
+			pk = request.getParameter("tcont_no");
+			byte[] tempcont =null;
+			System.out.println(pk);
+			TempContService contSvc = new TempContService();
+			TempContVO tempcontVO = contSvc.getOneTempCont(pk);
+			if(tempcontVO.getImg() == null){
+				tempcont = tempcontVO.getVdo();
+			}else{
+				tempcont = tempcontVO.getImg();
+			}
+			out.write(tempcont);
 			out.close(); 
 			return;
 		}

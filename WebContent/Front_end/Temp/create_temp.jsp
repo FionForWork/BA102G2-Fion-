@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-	pageEncoding="BIG5"%>
+ï»¿<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -75,7 +75,10 @@ img{
 .padding .img-container{
 	padding: 0 1%;
 }
-
+.errorMsgs {
+	color:red;
+	
+}
 </style>
 
 <script>
@@ -111,31 +114,31 @@ $("document").ready(function(){
 	Map<String,String> errorMsgs = (Map)request.getAttribute("errorMsgs");
 	
 %>
-	<h3>«Ø¥ß«İ¬D¿ï¦¨«~</h3>
+	<h3>å»ºç«‹å¾…æŒ‘é¸æˆå“</h3>
 
 	<div class="container">
 		<form action="<%=request.getContextPath()%>/temp/temp.do" method="post"
 				enctype="multipart/form-data">
-			<input type="submit" value="«Ø¥ß">
-			<label for="name">«İ¬D¿ï§@«~¦WºÙ <span class='errorMsgs'> ${errorMsgs.get("name")}</span></label> 
+			
+			<label for="name">å¾…æŒ‘é¸ä½œå“åç¨± <span class='errorMsgs'> ${errorMsgs.get("name")}</span></label> 
 			<input type="text" id="name" name="name"> 
-			<label for="datepicker1">©çÄá¤é´Á <span class='errorMsgs'> ${errorMsgs.get("create_date")}</span></label> 
+			<label for="datepicker1">æ‹æ”æ—¥æœŸ <span class='errorMsgs'> ${errorMsgs.get("create_date")}</span></label> 
 			<input type="date" id="datePicker" name="create_date"  /> 
 				
-			<label for="available">¥i¬D¿ï±i¼Æ <span class='errorMsgs'> ${errorMsgs.get("available_empty")} ${errorMsgs.get("available_number")}</span></label> 
+			<label for="available">å¯æŒ‘é¸å¼µæ•¸ <span class='errorMsgs'> ${errorMsgs.get("available_empty")} ${errorMsgs.get("available_number")}</span></label> 
 			<input type="number" id='available' name="available" step="1"> 
 				
-			<label for="country">«È¤á¦WºÙ</label>
+			<label for="country">å®¢æˆ¶åç¨±</label>
 			<select id="mem_no" name="mem_no">
 				<option value="1001">Fion</option>
 				<option value="1002">Cara</option>
 				<option value="1003">Mary</option>
 			</select> 
 			<br>
-			<label for="upload">¿ï¾Ü§@«~¤W¶Ç <span class='errorMsgs'> ${errorMsgs.get("file")}</span></label>
-			<input type="file" class="form-control" name="uploadTemp" id="upload"
+			<label for="upload">é¸æ“‡ä½œå“ä¸Šå‚³ <span class='errorMsgs'> ${errorMsgs.get("file")}</span></label>
+			<input type="file" class="form-control" name="uploadTempCont" id="upload"
 								onchange="preview_images()" multiple>
-					
+			<input type="submit" value="å»ºç«‹">		
 			<div id="showPanel" class="img-group flex-container padding">
 			
 			</div>
